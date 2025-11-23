@@ -52,3 +52,83 @@ export default Home;
 
 After updating these files and running npm run dev, you should see the application load with the Header and Footer in place, and all text rendered using the elegant Montserrat typeface
 
+It's time to implement imperative routing in pages/index.tsx file. This uses the useRouter hook to programmatically navigate users when they click your custom Button components.
+
+I will update the pages/index.tsx file with the required code.
+
+  import Button from "../components/common/Button";
+import { useRouter } from "next/router";
+import Head from 'next/head'; // Keep Head for SEO purposes
+
+interface PageRouteProps {
+  pageRoute: string
+}
+
+const Home = () => {
+  const router = useRouter()
+
+  // Imeperative routing with useRouter
+  // This function programmatically navigates the user to the specified path
+  const routeToNextPage  = ({ pageRoute }: PageRouteProps) => {
+    // router.push() handles the navigation
+    router.push(pageRoute, undefined, { shallow: false}) 
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Splash App - AI Foundation</title>
+      </Head>
+      
+      {/* Container for the main hero section */}
+      <div className="container mx-auto px-4 py-32 md:py-40 text-center min-h-[70vh] flex flex-col justify-center items-center">
+        
+        {/* Welcome Message */}
+        <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 leading-tight mb-4">
+          Welcome to <span className="text-indigo-600">Splash App!</span>
+        </h1>
+        <p className="text-xl text-gray-600 mb-12 max-w-3xl">
+          Your one-stop platform for next-generation AI features. Start exploring our tools below and experience scalable, type-safe development.
+        </p>
+
+        {/* Navigation Options using the reusable Button component */}
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+          <Button 
+            action={() => routeToNextPage({ pageRoute: '/generate-text-ai' })} 
+            buttonLabel="Generate Text (AI)" 
+            buttonBackgroundColor="blue" 
+          />
+          <Button 
+            action={() => routeToNextPage({ pageRoute: '/text-to-image'})} 
+            buttonLabel="Text to Image (AI)" 
+            buttonBackgroundColor="green" 
+          />
+          <Button 
+            action={() => routeToNextPage({ pageRoute: '/counter-app'})} 
+            buttonLabel="Simple Counter App" 
+            buttonBackgroundColor="orange" 
+          />
+        </div>
+        
+        {/* Note on 404 Pages */}
+        <p className="mt-16 text-sm text-gray-500 italic">
+          (Note: These pages do not exist yet, so clicking them will currently lead to a 404 error page.)
+        </p>
+      </div>
+    </>
+  );
+}
+
+export default Home;
+
+Home Page Content (pages/index.tsx)
+This updated file removes the static Head content (as it's better placed inside the Home function or kept simple), imports useRouter, and defines the routeToNextPage function which handles navigation when the buttons are clicked.
+
+When you run the application and click any of the new buttons, you will notice three key things:
+
+Navigation: The URL in the browser changes to the specified path (e.g., /generate-text-ai).
+
+404 Page: You land on the default Next.js "404 - This page could not be found." page because those routes haven't been created yet.
+
+Shared Layout Persistence: Despite being a 404 page, the content is still wrapped by your Header and Footer, proving that the Layout component setup in _app.tsx is working correctly!
+
